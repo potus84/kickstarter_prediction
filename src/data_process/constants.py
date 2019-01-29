@@ -1,0 +1,15 @@
+ID = 'ID '
+name = 'name '
+category = 'category '
+main_category = 'main_category '
+currency = 'currency '
+deadline = 'deadline '
+goal = 'goal '
+launched = 'launched '
+pledged = 'pledged '
+state = 'state '
+backers = 'backers '
+country = 'country '
+usd_pledged = 'usd pledged '
+
+new_header = ['name', 'main_category', 'launched_month', 'country', 'campaign_length', 'goal', 'usd_pledged', 'pledge_per_packer', 'state']
