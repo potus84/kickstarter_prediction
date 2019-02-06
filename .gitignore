@@ -1,0 +1,5 @@
+#ignore folder named `EirikEnveiroment`
+EirikEnveiroment/
+*.xml
+*.iml
+.DS_Store
