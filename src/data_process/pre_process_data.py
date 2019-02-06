@@ -4,7 +4,7 @@ from settings import *
 import datetime
 from src.data_process.constants import *
 
-kickstater_file = 'ks-projects-201801.csv'
+kickstater_file = 'ks-projects-201612.csv'
 
 def read_kickstarter_file():
     # with open(join(DATA_RAW_ROOT, kickstater_file), encoding='cp1252') as csv_file:
