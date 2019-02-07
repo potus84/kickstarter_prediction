@@ -1,6 +1,9 @@
 #ignore folder named `EirikEnveiroment`
 EirikEnveiroment/
 virtual_env/
+ __pycache__/settings.cpython-37.pyc
+src/data_process/__pycache__/constants.cpython-37.pyc
+
 *.xml
 *.iml
 .DS_Store
