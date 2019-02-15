@@ -2,6 +2,7 @@ import re
 import preprocessor as p
 from nltk.corpus import stopwords
 from nltk.tokenize import TweetTokenizer, word_tokenize
+from pycorenlp import StanfordCoreNLP
 
 
 class TextPreprocess:
@@ -38,15 +39,26 @@ class TextPreprocess:
 
         return no_stop_words
 
-    def preprocess_and_tokenize_tweet(self):
+    def preprocess_text(self):
         """
         Preprocess tweet, remove url, emoji, mentions, hastags, stopwords
         :return: tweet
         """
         p.set_options(p.OPT.URL, p.OPT.EMOJI, p.OPT.MENTION, p.OPT.HASHTAG)  # set options for the preprocessor
-        cleaned_tweet = p.clean(self.raw_text)
-        cleaned_tokens = self.remove_stopwords_and_tokenize(cleaned_tweet)  # remove stopwords
-        return cleaned_tokens
+        cleaned_text = p.clean(self.raw_text)
+        return cleaned_text
+
+    def get_sentiment_value(self):
+        """
+        Return the sentiment value of the tweet
+        :param tweet: a non-preprocess tweet
+        :return: integer sentiment value in range [0-4]
+        """
+        nlp = StanfordCoreNLP('http://localhost:9000')
+        process_text = self.preprocess_text()
+        res = nlp.annotate(process_text, properties={'annotators': 'sentiment', 'outputFormat': 'json', 'timeout': 10000,})
+        sentiment = int(res["sentences"][0]["sentimentValue"])
+        return sentiment
 
     def num_occurrences(self, pattern):
         """
