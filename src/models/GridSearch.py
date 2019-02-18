@@ -68,47 +68,59 @@ Train different model
 # XGBoost
 xgb = XGBClassifier()
 # Set the parameters by cross-validation
-tuned_parameters = {
-              'objective':['binary:logistic'],
-              'learning_rate': [0.1], #so called `eta` value
-              'max_depth': [3, 4, 5, 6],
-              'min_child_weight': [1, 2, 3],
-#               'silent': [1],
-              'subsample': [0.8],
-              'colsample_bytree': [0.7],
-              'n_estimators': [100, 500, 1000, 1500], #number of trees, change it to 1000 for better results
-#               'missing':[-999],
-#               'seed': [1337]
-            }
+# tuned_parameters = {
+#               'objective':['binary:logistic'],
+#               'learning_rate': [0.05, 0.1, 0.15, 0.2], #so called `eta` value
+#               'max_depth': [3, 4, 5, 6],
+#               'min_child_weight': [1, 2, 3, 4, 5, 6],
+#               'colsample_bytree': [0.7],
+#                'reg_alpha': [1e-5, 1e-2,  0.75],
+#                'reg_lambda': [1e-5, 1e-2, 0.45],
+#                'subsample': [0.6, 0.8, 0.95],
+#               'n_estimators': [100, 500, 1000, 1500], #number of trees, change it to 1000 for better results
+#             }
+param_test1 = {
+ 'max_depth':range(3,10,2),
+ 'min_child_weight':range(1,6,2)
+}
+xgb = XGBClassifier(learning_rate =0.1, n_estimators=140, max_depth=5,
+ min_child_weight=1, gamma=0, subsample=0.8, colsample_bytree=0.8,
+ objective= 'binary:logistic', scale_pos_weight=1, seed=27)
+gsearch1 = GridSearchCV(xgb, 
+ param_grid = param_test1, scoring='accuracy',n_jobs=-1, iid=False, cv=5)
+gsearch1.fit(train_features, train_targets)
+# print(gsearch1.grid_scores_)
+print(gsearch1.best_params_)
+print(gsearch1.best_score_)
 
-scores = ['accuracy', 'f1-macro']
+# scores = ['accuracy']
 
-for score in scores:
-    print("# Tuning hyper-parameters for %s" % score)
-    print()
+# for score in scores:
+#     print("# Tuning hyper-parameters for %s" % score)
+#     print()
 
-    clf = GridSearchCV(xgb, tuned_parameters, cv=5,
-                       scoring=score)
-    clf.fit(train_features, train_targets)
+#     clf = GridSearchCV(xgb, tuned_parameters, cv=5,
+#                        scoring=score)
+#     clf.fit(train_features, train_targets)
 
-    print("Best parameters set found on development set:")
-    print()
-    print(clf.best_params_)
-    print()
-    print("Grid scores on development set:")
-    print()
-    means = clf.cv_results_['mean_test_score']
-    stds = clf.cv_results_['std_test_score']
-    for mean, std, params in zip(means, stds, clf.cv_results_['params']):
-        print("%0.3f (+/-%0.03f) for %r"
-              % (mean, std * 2, params))
-    print()
+#     print("Best parameters set found on development set:")
+#     print()
+#     print(clf.best_params_)
+#     print()
+#     print("Grid scores on development set:")
+#     print()
+#     means = clf.cv_results_['mean_test_score']
+#     stds = clf.cv_results_['std_test_score']
+#     for mean, std, params in zip(means, stds, clf.cv_results_['params']):
+#         print("%0.3f (+/-%0.03f) for %r"
+#               % (mean, std * 2, params))
+#     print()
 
-    print("Detailed classification report:")
-    print()
-    print("The model is trained on the full development set.")
-    print("The scores are computed on the full evaluation set.")
-    print()
-    y_true, y_pred = test_targets, clf.predict(test_features)
-    print(classification_report(y_true, y_pred))
-    print()
+#     print("Detailed classification report:")
+#     print()
+#     print("The model is trained on the full development set.")
+#     print("The scores are computed on the full evaluation set.")
+#     print()
+#     y_true, y_pred = test_targets, clf.predict(test_features)
+#     print(classification_report(y_true, y_pred))
+#     print()
