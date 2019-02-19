@@ -54,8 +54,8 @@ Split the data into a training and a testing set
 """
 X = dataset.drop(['state'], axis=1)
 y = dataset['state']
-train_features, test_features, train_targets, test_targets = \
-    train_test_split(X, y, test_size=0.33, random_state=0)
+# train_features, test_features, train_targets, test_targets = \
+#     train_test_split(X, y, test_size=0.33, random_state=0)
 
 
 ###########################################################################################################
@@ -80,15 +80,14 @@ xgb = XGBClassifier()
 #               'n_estimators': [100, 500, 1000, 1500], #number of trees, change it to 1000 for better results
 #             }
 param_test1 = {
- 'max_depth':range(3,10,2),
- 'min_child_weight':range(1,6,2)
+'reg_alpha':[1e-5, 5e-5, 7e-5]
 }
-xgb = XGBClassifier(learning_rate =0.1, n_estimators=140, max_depth=5,
- min_child_weight=1, gamma=0, subsample=0.8, colsample_bytree=0.8,
+xgb = XGBClassifier(learning_rate =0.1, n_estimators=140, max_depth=10,
+ min_child_weight=5, gamma=0.1, subsample=0.9, colsample_bytree=0.7,
  objective= 'binary:logistic', scale_pos_weight=1, seed=27)
 gsearch1 = GridSearchCV(xgb, 
  param_grid = param_test1, scoring='accuracy',n_jobs=-1, iid=False, cv=5)
-gsearch1.fit(train_features, train_targets)
+gsearch1.fit(X, y)
 # print(gsearch1.grid_scores_)
 print(gsearch1.best_params_)
 print(gsearch1.best_score_)

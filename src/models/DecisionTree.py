@@ -12,7 +12,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import LabelEncoder
 from os.path import join
 import numpy as np
-import graphviz
+# import graphviz
 from settings import *
 from xgboost import XGBClassifier
 # from sklearn import cubist.Cubist
@@ -66,17 +66,17 @@ Train different model
 # carl = DecisionTreeClassifier(criterion = 'entropy').fit(train_features, train_targets)
 # XGBoost
 xgb = XGBClassifier(
- learning_rate =0.1,
- n_estimators=1500,
- max_depth=5,
- min_child_weight=1,
- gamma=0,
- subsample=0.8,
- colsample_bytree=0.8,
- objective= 'binary:logistic',
- nthread=4,
- scale_pos_weight=1,
- seed=27)\
+    learning_rate =0.1, 
+    n_estimators=1500,
+    max_depth=10,
+    min_child_weight=5,
+    gamma=0.1,
+    subsample=0.9,
+    colsample_bytree=0.7,
+    objective= 'binary:logistic',
+    reg_alpha=5e-5,
+    scale_pos_weight=1,
+    seed=27)\
  # .fit(train_features, train_targets)
 # # Random forest
 # rf = RandomForestClassifier(n_jobs=-1, n_estimators=500).fit(train_features, train_targets)
