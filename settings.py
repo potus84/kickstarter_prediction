@@ -6,3 +6,5 @@ DATA_ENGINEER_ROOT = os.path.join(PROJECT_ROOT, 'data', 'engineered')
 DATA_EXTERNAL_ROOT = os.path.join(PROJECT_ROOT, 'data', 'external')
 
 MODELS_ROOT = os.path.join(PROJECT_ROOT, 'models')
+
+#export PYTHONPATH=$PYTHONPATH:'pwd'
