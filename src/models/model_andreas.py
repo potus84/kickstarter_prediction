@@ -11,7 +11,6 @@ from sklearn.decomposition import PCA, IncrementalPCA
 dataset = pd.read_csv(join(DATA_PREPROCESSED_ROOT, 'andreas-ksp-201801.csv'))
 
 dataset = dataset.drop([
-        random_mod,
         #name_whitespace, name_symbols, name_wovels, name_caps, <-
         #name_avr_length,
         ##name_exclamation, name_questionmark, name_punctuation, name_whitespace, name_symbols, name_wovels, name_chars, name_caps, name_badmouth,

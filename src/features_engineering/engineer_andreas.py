@@ -17,7 +17,7 @@ raw_file = 'ks-projects-201801.csv'
 processed_file = 'andreas-ksp-201801.csv'
 
 
-header = [random_mod,
+header = [
             name_whitespace, name_symbols, name_wovels, name_caps, name_avr_length, name_sentiment_polarity, name_sentiment_subjectivity,
             main_category, category, launched, campaign_length, goal, currency, country,
             pledge_per_backer, required_backers, required_daily_backers,
@@ -100,7 +100,7 @@ def preprocess_data(row):
         #if goal_value > 0 and campaign_length_value > 0:
         #   daily_goal_value = round(goal_value / campaign_length_value, 2)
 
-        return [random_mod_value,
+        return [
                 num_whitespace, num_symbols, num_wovels, num_caps, num_avr_length, num_sentiment_polarity, num_sentiment_subjectivity,
                 row[main_category], row[category], launched_date.month, campaign_length_value, goal_value, row[currency], row[country],
                 pledge_per_packer, required_backers_number, required_daily_backers_number,
