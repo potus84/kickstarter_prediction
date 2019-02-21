@@ -2,6 +2,8 @@ import re
 import preprocessor as p
 from nltk.corpus import stopwords
 from nltk.tokenize import TweetTokenizer, word_tokenize
+from pycorenlp import StanfordCoreNLP
+from textblob import TextBlob
 
 
 class TextPreprocess:
@@ -38,15 +40,38 @@ class TextPreprocess:
 
         return no_stop_words
 
-    def preprocess_and_tokenize_tweet(self):
+    def preprocess_text(self):
         """
         Preprocess tweet, remove url, emoji, mentions, hastags, stopwords
         :return: tweet
         """
         p.set_options(p.OPT.URL, p.OPT.EMOJI, p.OPT.MENTION, p.OPT.HASHTAG)  # set options for the preprocessor
-        cleaned_tweet = p.clean(self.raw_text)
-        cleaned_tokens = self.remove_stopwords_and_tokenize(cleaned_tweet)  # remove stopwords
-        return cleaned_tokens
+        cleaned_text = p.clean(self.raw_text)
+        return cleaned_text
+
+    # def get_sentiment_value(self):
+    #     """
+    #     Return the sentiment value of the tweet
+    #     :param tweet: a non-preprocess tweet
+    #     :return: integer sentiment value in range [0-4]
+    #     """
+    #     nlp = StanfordCoreNLP('http://localhost:9000')
+    #     process_text = self.preprocess_text()
+    #     res = nlp.annotate(process_text, properties={'annotators': 'sentiment', 'outputFormat': 'json', 'timeout': 10000,})
+    #     sentiment = int(res["sentences"][0]["sentimentValue"])
+    #     return sentiment
+
+    def get_sentiment_value(self):
+        """
+        Return the sentiment value of the tweet
+        :param tweet: a non-preprocess tweet
+        :return: integer sentiment value in range [0-4]
+        """
+        raw_text = self.preprocess_text()
+        txt_blob = TextBlob(raw_text)
+        sentiment = txt_blob.sentiment.polarity
+        return sentiment
+
 
     def num_occurrences(self, pattern):
         """
@@ -56,3 +81,36 @@ class TextPreprocess:
         :return: Integer indicates number of occurrences
         """
         return len(re.findall(pattern, self.raw_text))
+
+    def check_existence_of_words(self, wordlist):
+        """
+        Function for the slang or curse words and acronyms features
+        :param self: semi process tweet (hashtags mentions removed)
+        :param wordlist:List of words
+        :return: the binary vector of word in the tweet
+        """
+
+        raw_text = self.preprocess_text()
+        found_word = 0
+        for word in wordlist:
+            if raw_text.find(word) != -1:
+                found_word = 1
+                break
+
+        return found_word
+
+    def contain_google_bad_words(self, google_bad_words_list):
+        """
+        Return whether the tweet contains google bad words or not
+        :param tweet: Raw tweet
+        :return: a binary vector
+        """
+        return self.check_existence_of_words(google_bad_words_list)
+
+    def contain_noswearing_bad_words(self, noswearing_bad_words_list):
+        """
+        Return whether the tweet contains noswearing.com bad words or not
+        :param tweet: Raw tweet
+        :return: a binary vector    """
+
+        return self.check_existence_of_words(noswearing_bad_words_list)
