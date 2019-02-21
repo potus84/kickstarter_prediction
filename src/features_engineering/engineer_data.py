@@ -1,7 +1,8 @@
 import csv
 import math
-
 import numpy as np
+import pickle
+
 from os.path import join
 
 from settings import *
@@ -9,6 +10,10 @@ from src.data_process.constants import *
 from src.features_engineering.TextPreprocess import TextPreprocess
 
 kickstater_file = 'ks-projects-201801.csv'
+google_bad_words_path = join(DATA_EXTERNAL_ROOT, 'google_bad_words_list.txt')
+no_swearing_words_path = join(DATA_EXTERNAL_ROOT, 'noswearing_bad_words_list.txt')
+google_bad_words_list = pickle.load(open(google_bad_words_path, 'rb'))
+no_swearing_words_list = pickle.load(open(no_swearing_words_path, 'rb'))
 
 def read_preprocess_file():
     # with open(join(DATA_RAW_ROOT, kickstater_file), encoding='cp1252') as csv_file:
@@ -24,18 +29,25 @@ def engineer_data(row):
 
         num_exclaimation = processor.num_occurrences(r'!')
         num_question_mark = processor.num_occurrences(r'\?')
+        contain_google_bad_words = processor.contain_google_bad_words(google_bad_words_list)
+        contain_no_swearing_bad_words = processor.contain_google_bad_words(no_swearing_words_list)
+
         try:
             sentiment = processor.get_sentiment_value()
+            a = True
         except IndexError:
             print(row)
             return None
-        if(row['goal'] != 0):
-            log_goal = math.log10(float(row[goal]))
-        else:
-            return None
+
+        # if(row['goal'] != 0):
+        #     log_goal = math.log10(float(row[goal]))
+        # else:
+        #     return None
         # Order ['contain_exclamation', 'contain_question_mark', 'main_category',
         # st'launched_month', 'country', 'campaign_length', 'goal', 'usd_pledged', 'pledge_per_packer', 'state']
-        new_row = [num_exclaimation, num_question_mark, sentiment, row['category'], row['main_category'],
+        new_row = [num_exclaimation, num_question_mark, sentiment, contain_google_bad_words,
+                   contain_no_swearing_bad_words,
+                   row['category'], row['main_category'],
                    row['launched_month'], row['country'], row['campaign_length'], row[goal],
                    row['usd_pledged'], row['pledge_per_packer'], row['state']]
         return new_row
