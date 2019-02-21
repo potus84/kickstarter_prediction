@@ -15,4 +15,5 @@ usd_pledged_real = 'usd_pledged_real'
 usd_goal_real = 'usd_goal_real'
 
 new_header = ['name', 'category', 'main_category', 'launched_month', 'country', 'campaign_length', 'goal', 'usd_pledged', 'pledge_per_packer', 'state']
-engineer_header = ['contain_exclamation', 'contain_question_mark', 'sentiment', 'category', 'main_category', 'launched_month', 'country', 'campaign_length', 'goal', 'usd_pledged', 'pledge_per_packer', 'state']
+engineer_header = ['contain_exclamation', 'contain_question_mark', 'sentiment', 'google_bad_words', 'no_swearing_words',
+                   'category', 'main_category', 'launched_month', 'country', 'campaign_length', 'goal', 'usd_pledged', 'pledge_per_packer', 'state']
