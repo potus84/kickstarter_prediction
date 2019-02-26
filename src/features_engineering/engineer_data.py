@@ -4,11 +4,14 @@ import math
 import numpy as np
 from os.path import join
 
+from textblob import TextBlob
+
 from settings import *
 from src.data_process.constants import *
 from src.features_engineering.TextPreprocess import TextPreprocess
 
 kickstater_file = 'ks-projects-201801.csv'
+
 
 def read_preprocess_file():
     # with open(join(DATA_RAW_ROOT, kickstater_file), encoding='cp1252') as csv_file:
@@ -25,7 +28,7 @@ def engineer_data(row):
         num_exclaimation = processor.num_occurrences(r'!')
         num_question_mark = processor.num_occurrences(r'\?')
         try:
-            sentiment = processor.get_sentiment_value()
+            sentiment = processor.get_polarity_value()
         except IndexError:
             print(row)
             return None
