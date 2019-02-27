@@ -32,6 +32,7 @@ def main():
     test_features = test.drop(['success'], axis=1)
     test_targets = test['success']
 
+
     parser = argparse.ArgumentParser()
     # For whole folder processing
     parser.add_argument('--alg', help='The training algorithm')
