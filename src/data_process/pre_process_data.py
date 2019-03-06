@@ -41,7 +41,7 @@ def preprocess_data(row):
 
         if row[usd_goal_real] != '':
             goal_value = round(float(row[usd_goal_real]), 2)
-        elif (row[goal] != '' and row[currency] == 'USD'):
+        elif row[goal] != '' and row[currency] == 'USD':
             goal_value = round(float(row[goal]), 2)
         else:
             print('No value in USD for the goal', row)
@@ -49,7 +49,7 @@ def preprocess_data(row):
         if row[backers] != '0':
             pledge_per_packer = round(usd_pledged_value / int(row[backers]), 2)
         # Order ['name', 'main_category', 'launched_month', 'country', 'campaign_length', 'goal', 'usd_pledge', 'pledge_per_packer', 'state']
-        new_row = [row[name], row[main_category], launched_date.month, row[country], campaign_length,
+        new_row = [row[name], row[category], row[main_category], launched_date.month, row[country], campaign_length,
                    goal_value,
                    usd_pledged_value, pledge_per_packer, row[state]]
         return new_row
