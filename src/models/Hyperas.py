@@ -43,9 +43,9 @@ def data():
     # y_test = test.success
     #
     # return x_train, y_train, x_test, y_test
-    train = pd.read_csv('data/train_quantile_transform.csv', encoding='latin1', low_memory=True)
-    test = pd.read_csv('data/test_quantile_transform.csv', encoding='latin1', low_memory=True)
-    val = pd.read_csv('data/val_quantile_transform.csv', encoding='latin1', low_memory=True)
+    train = pd.read_csv('data/data_quantile_transform/train_quantile_transform.csv', encoding='latin1', low_memory=True)
+    test = pd.read_csv('data/data_quantile_transform/test_quantile_transform.csv', encoding='latin1', low_memory=True)
+    val = pd.read_csv('data/data_quantile_transform/val_quantile_transform.csv', encoding='latin1', low_memory=True)
 
     train_x = train.drop(['success'], axis=1)
     train_y = train.success
@@ -76,6 +76,15 @@ def create_model(train_x, train_y, val_x, val_y, test_x, test_y):
     model = Sequential()
     model.add(Dense(
         {{choice([10, 20, 25])}},
+        kernel_regularizer=l2({{choice([0.0001, 0.001, 0.01, 0.1])}}),
+        activation="relu", input_shape=(221,)
+    ))
+    model.add(Dropout({{uniform(0, 1)}}))
+
+    model = Sequential()
+    model.add(Dense(
+        {{choice([10, 20, 25])}},
+        kernel_regularizer=l2({{choice([0.0001, 0.001, 0.01, 0.1])}}),
         activation="relu", input_shape=(221,),
     ))
     model.add(Dropout({{uniform(0, 1)}}))
@@ -83,13 +92,7 @@ def create_model(train_x, train_y, val_x, val_y, test_x, test_y):
     model = Sequential()
     model.add(Dense(
         {{choice([10, 20, 25])}},
-        activation="relu", input_shape=(221,),
-    ))
-    model.add(Dropout({{uniform(0, 1)}}))
-
-    model = Sequential()
-    model.add(Dense(
-        {{choice([10, 20, 25])}},
+        kernel_regularizer=l2({{choice([0.0001, 0.001, 0.01, 0.1])}}),
         activation="relu", input_shape=(221,),
     ))
     model.add(Dropout({{uniform(0, 1)}}))
@@ -118,7 +121,7 @@ if __name__ == '__main__':
                                           data=data,
                                           algo=tpe.suggest,
                                           eval_space=True,
-                                          max_evals=10,
+                                          max_evals=20,
                                           trials=Trials(),
                                           notebook_name='src/models/Hyperas')
     X_train, Y_train, _, _, X_test, Y_test = data()
